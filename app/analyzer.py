@@ -1,0 +1,1 @@
+# cv ve iş ilanları analiz mantığı

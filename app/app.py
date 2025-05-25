@@ -1,6 +1,8 @@
 from load_data import load_resume_data
+from preprocess import preprocess_data
 
 df = load_resume_data()
+df = preprocess_data(df)
 
-# Örnek: İlk 5 satırı yazdır
-print(df[['skills', 'job_position_name', 'matched_score']].head())
+# İlk satırları kontrol et
+print(df[['skills', 'skills_required', 'matched_score']].head())

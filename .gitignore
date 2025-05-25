@@ -1,0 +1,9 @@
+# Sanal ortam
+.venv/
+
+# Veri setleri
+*.csv
+
+# PyCharm / IDE dosyaları
+.idea/
+

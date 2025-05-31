@@ -20,3 +20,4 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 
     return df
+print("çalıştı")

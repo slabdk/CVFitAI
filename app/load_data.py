@@ -1,3 +1,4 @@
+# Veri yükleme
 import pandas as pd
 
 def load_resume_data(path="app/data/CVdata.csv"):

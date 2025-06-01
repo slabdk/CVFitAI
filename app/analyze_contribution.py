@@ -1,0 +1,1 @@
+#GPT ile adayın işletmeye ve tersine katkı analizi

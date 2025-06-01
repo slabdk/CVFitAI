@@ -1,0 +1,1 @@
+#.pptx / .pdf / .docx okuma ve düz metne çevirme

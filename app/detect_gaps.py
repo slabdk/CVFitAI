@@ -1,0 +1,1 @@
+#Eksik nitelik/handikap tespiti (rule-based + GPT opsiyonlu)

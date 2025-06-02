@@ -1,20 +1,18 @@
+import os
 import pandas as pd
+def preprocess_job_csv(input_path, output_path):
+    df = pd.read_csv(input_path)
 
-def preprocess_job_data(path="app/data/postings.csv"):
-    # CSV dosyasını oku
-    df = pd.read_csv(path)
+    if 'job_description' in df.columns:
+        text_column = 'job_description'
+    elif 'Job_Description' in df.columns:
+        text_column = 'Job_Description'
+    elif 'description' in df.columns:
+        text_column = 'description'
+    else:
+        raise ValueError(
+            "CSV'de iş tanımı için 'job_description', 'Job_Description' ya da 'description' sütunu bulunamadı.")
 
-    # Sütun adlarını temizle
-    df.columns = df.columns.str.strip().str.lower().str.replace(' ', '_')
-
-    # İşimize yarayan sütunları al
-    keep_columns = ['title', 'description', 'skills_desc']
-    df = df[[col for col in keep_columns if col in df.columns]]
-
-    # Eksik satırları temizle (boş olanları at)
-    df = df.dropna(subset=keep_columns)
-
-    # Tüm string hücrelerde baş/son boşlukları temizle
-    df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
-
-    return df
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    df.to_csv(output_path, index=False)
+    print(f"✅ Temizlenmiş iş ilanı verisi şuraya kaydedildi: {output_path}")

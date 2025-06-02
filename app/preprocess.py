@@ -1,23 +1,33 @@
 import pandas as pd
+import re
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+import nltk
+import os
 
-def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
-    # Sütun adlarını temizle
-    df.columns = df.columns.str.strip().str.replace('\ufeff', '')
+nltk.download('stopwords')
+nltk.download('wordnet')
 
-    # Gereksiz/çift sütun varsa sil
-    df = df.drop(columns=["responsibilities"], errors="ignore")
+stop_words = set(stopwords.words('english'))
+lemmatizer = WordNetLemmatizer()
 
-    # matched_score sayıya çevrilmeli
-    df["matched_score"] = pd.to_numeric(df["matched_score"], errors="coerce")
 
-    # Eksik kritik alanları temizle
-    df = df.dropna(subset=["skills", "skills_required", "matched_score"])
+def clean_text(text):
+    text = str(text).lower()
+    text = re.sub(r'<[^>]+>', ' ', text)
+    text = re.sub(r'http\S+', ' ', text)
+    text = re.sub(r'[^a-z\s]', ' ', text)
+    tokens = text.split()
+    tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stop_words and len(word) > 2]
+    return ' '.join(tokens)
 
-    # career_objective boşsa Unknown yap
-    df["career_objective"] = df["career_objective"].fillna("Unknown")
 
-    # Tüm string hücreleri kırp
-    df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+def preprocess_resume_csv(input_path, output_path):
+    df = pd.read_csv(input_path)
 
-    return df
-print("çalıştı")
+    if 'Resume_str' not in df.columns:
+        raise ValueError("CSV dosyasında 'Resume_str' sütunu bulunamadı.")
+    df['Cleaned_Resume'] = df['Resume_str'].apply(clean_text)
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    df.to_csv(output_path, index=False)
+    print(f"✅ Temizlenmiş CV verisi şuraya kaydedildi: {output_path}")

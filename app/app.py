@@ -1,12 +1,6 @@
-from load_data import load_resume_data
-from preprocess import preprocess_data
-from preprocess_jobs import preprocess_job_data
+from preprocess import preprocess_resume_csv
+from preprocess_jobs import preprocess_job_csv
 
-job_df = preprocess_job_data()
-print(job_df.head())
-
-df = load_resume_data()
-df = preprocess_data(df)
-
-# İlk satırları kontrol et
-print(df[['skills', 'skills_required', 'matched_score']].head())
+# Veri temizleme
+preprocess_resume_csv("app/data/Resume.csv", "app/cleaned_data/cleaned_resumes.csv")
+preprocess_job_csv("app/data/training_data.csv", "app/cleaned_data/cleaned_jobs.csv")
